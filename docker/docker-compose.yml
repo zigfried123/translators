@@ -1,0 +1,73 @@
+
+# Создаем общую сеть deafult для всех контейнеров
+networks:
+  default:
+    driver: bridge
+
+# Создаем отдельные контейнеры
+services:
+  # Контейнер с веб-приложением
+  app:
+    # Собираем из Dockerfile 
+    build: 
+      # Корнем указываем корень основного проекта
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    # Показываем наружу 80 порт
+    ports: 
+      - "80:80"
+    # Подключаем к общей сети с другими контейнерами
+    networks: 
+      - default
+    # Запускаем только после db
+    depends_on: 
+      - db    
+    # Линкуем внешнюю папку с исходниками внутрь
+    volumes:
+      - "../app:/var/www/app"
+      # Так же линкуем конфиг для nginx
+      - "./conf/nginx:/etc/nginx/sites-available"      
+  # Контейнер с базой данных
+  db:
+    image: mysql:latest
+    # Подключаем к общей сети с другими контейнерами
+    networks: 
+      - default
+    # Показываем наружу порт
+    ports:
+      - "3336:3306"
+    # Задаем параметры для инициализации БД
+    environment:
+      # Пароль к БД
+      MYSQL_ROOT_PASSWORD: root
+      # Создаваемая по умолчанию бд
+      MYSQL_DATABASE: yii-template-db
+    # Линкуем внешнюю папку для хранения БД
+    volumes:
+      - "./database:/var/lib/mysql"
+
+  vue:
+    build:
+      context: ../ # Build from the current directory
+      dockerfile: ./docker/Dockerfile-vue # Use the Dockerfile in the current directory
+    ports:
+      - "8080:8080" # Map host port 8080 to container port 8080
+    volumes:
+      - "../vue:/var/www/vue"
+      - ./src:/vue/src
+      - /var/www/vue/node_modules
+    networks:
+      - default
+    stdin_open: true
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+      depends_on:
+        - app
+      ports:
+        - "8082:80"
