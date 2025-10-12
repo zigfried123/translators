@@ -1,3 +1,4 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
 # Создаем общую сеть deafult для всех контейнеров
 networks:
@@ -8,7 +9,7 @@ networks:
 services:
   # Контейнер с веб-приложением
   app:
-    # Собираем из Dockerfile 
+    # Собираем из Dockerfile-c
     build: 
       # Корнем указываем корень основного проекта
       context: ../
@@ -49,7 +50,7 @@ services:
   vue:
     build:
       context: ../ # Build from the current directory
-      dockerfile: ./docker/Dockerfile-vue # Use the Dockerfile in the current directory
+      dockerfile: ./docker/Dockerfile-vue # Use the Dockerfile-c in the current directory
     ports:
       - "8080:8080" # Map host port 8080 to container port 8080
     volumes:
@@ -71,3 +72,14 @@ services:
         - app
       ports:
         - "8082:80"
+
+  translatorservice:
+    image: translatorservice
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile-c
+    ports:
+      - 5278:5278
+    networks:
+      - default
+

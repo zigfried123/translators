@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ntLFvaZzkD0=",
+  "success": true,
+  "projectFilePath": "/home/home/PhpstormProjects/translators/TranslatorService/TranslatorService.csproj",
+  "expectedPackageFiles": [
+    "/home/home/.nuget/packages/microsoft.aspnetcore.openapi/9.0.9/microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512",
+    "/home/home/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

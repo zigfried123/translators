@@ -1,0 +1,6 @@
+@TranslatorService_HostAddress = http://localhost:5278
+
+GET {{TranslatorService_HostAddress}}/translator-list/
+Accept: application/json
+
+###
