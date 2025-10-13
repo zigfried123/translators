@@ -2,6 +2,7 @@
 
 namespace backend\modules\translators\controllers;
 
+use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 
 class DefaultController extends ActiveController
@@ -19,6 +20,9 @@ class DefaultController extends ActiveController
                 'Access-Control-Request-Headers' => ['*'], // Allow any headers
                 'Access-Control-Max-Age' => 86400, // Optional: max duration of preflight cache
             ],
+        ];
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
         ];
         return $behaviors;
     }
