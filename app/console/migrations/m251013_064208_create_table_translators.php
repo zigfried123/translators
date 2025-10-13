@@ -9,9 +9,9 @@ class m251013_064208_create_table_translators extends Migration
     {
         $this->createTable('translators', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(),
-            'weekdays' => $this->boolean(),
-            'worktime' => $this->json()
+            'name' => $this->string()->notNull()->unique(),
+            'weekdays' => $this->boolean()->notNull(),
+            'worktime' => 'JSON NOT NULL'
         ]);
     }
 

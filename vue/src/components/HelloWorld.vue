@@ -35,7 +35,16 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+
+  async mounted() {
+    let res = await fetch('http://localhost:80/translators');
+    res = await res.json();
+    console.log(res);
+
   }
+
+
 }
 </script>
 

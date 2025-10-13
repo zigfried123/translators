@@ -10,11 +10,13 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'backend\modules\translators\Bootstrap',
+    ],
     'modules' => [
         'translators' => [
             'class' => 'backend\modules\translators\Module',
-            // ... другие настройки модуля ...
         ],
     ],
     'components' => [
@@ -45,8 +47,10 @@ return [
 
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
+
             ],
         ],
 
