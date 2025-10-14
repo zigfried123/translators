@@ -52,11 +52,11 @@ services:
       context: ../ # Build from the current directory
       dockerfile: ./docker/Dockerfile-vue # Use the Dockerfile-c in the current directory
     ports:
-      - "8080:8080" # Map host port 8080 to container port 8080
+      - "5173:5173" # Map host port 8080 to container port 8080
     volumes:
       - "../vue:/var/www/vue"
       - ./src:/vue/src
-      - /var/www/vue/node_modules
+      - ../vue/node_modules:/var/www/vue/node_modules
     networks:
       - default
     stdin_open: true

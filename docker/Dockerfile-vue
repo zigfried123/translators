@@ -8,12 +8,12 @@ RUN npm install -g http-server
 WORKDIR /var/www/vue
 
 # Копируем package.json и lock-файл
-COPY /vue/package*.json ./
+COPY /vue/package*.json /vue/yarn.lock ./
 
 # Устанавливаем зависимости
 RUN npm install
 
 # Expose the port where the application will run
-EXPOSE 8080
+EXPOSE 5173
 
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "dev", "--", "--host"]
