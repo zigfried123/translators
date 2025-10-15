@@ -36,7 +36,6 @@ class AddUserController extends Controller
         $translatorModel = new Translator();
         $translatorModel->user_id = $user->id;
         $translatorModel->weekdays = 1;
-        //$translatorModel->worktime = [];
 
         $translatorModel->save();
 

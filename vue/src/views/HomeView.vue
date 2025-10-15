@@ -3,15 +3,26 @@ import TheWelcome from '../components/Login.vue'
 import {onMounted, ref, reactive} from 'vue'
 import {useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/user'
+import axios from 'axios'
 
 const store = useUserStore();
 const router = useRouter();
 
 
-onMounted(() => {
+onMounted(async () => {
   if (!store.token) {
-    router.push({name: 'login'})
+    return router.push({name: 'login'})
   }
+
+  const res = await axios.post('http://localhost:80/user/userdata-by-token', {token: store.token}, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  const data = await res.data;
+
+  console.log(data);
 });
 
 

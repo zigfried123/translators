@@ -64,4 +64,27 @@ class UserController extends ActiveController
 
     }
 
+    public function actionUserdataByToken(){
+
+        $auth = Yii::$app->authManager;
+
+
+        $request = Yii::$app->request;
+        $post = $request->post();
+        $token = $post['token'];
+
+        $user = User::findIdentityByAccessToken($token);
+
+        $roles = array_keys($auth->getRolesByUser($user->getId()));
+
+
+        $data = ['user' => $user->username, 'roles' => $roles];
+        if($user->translator) {
+            $data['translator'] = $user->translator;
+        }
+
+        return $data;
+
+    }
+
 }

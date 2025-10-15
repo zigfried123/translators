@@ -2,8 +2,8 @@
 
 namespace common\models;
 
+use backend\modules\translators\models\Translator;
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -215,5 +215,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateAccessToken()
     {
         $this->access_token = Yii::$app->security->generateRandomString();
+    }
+
+    public function getTranslator()
+    {
+        return $this->hasOne(Translator::class, ['user_id' => 'id']);
     }
 }
