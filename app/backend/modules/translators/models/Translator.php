@@ -12,7 +12,7 @@ use Yii;
  * @property int|null $weekdays
  * @property string|null $worktime
  */
-class Translators extends \yii\db\ActiveRecord
+class Translator extends \yii\db\ActiveRecord
 {
 
 
@@ -21,7 +21,7 @@ class Translators extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'translators';
+        return 'translator';
     }
 
     /**
@@ -30,10 +30,10 @@ class Translators extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'weekdays', 'worktime'], 'default', 'value' => null],
+            [['worktime'], 'default', 'value' => []],
             [['weekdays'], 'boolean'],
             [['worktime'], 'string'],
-            [['name'], 'string', 'max' => 255],
+            [['user_id'], 'integer'],
         ];
     }
 

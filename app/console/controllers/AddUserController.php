@@ -2,7 +2,7 @@
 
 namespace console\controllers;
 
-use backend\models\SignupForm;
+use backend\modules\translators\models\Translator;
 use common\models\User;
 use yii\console\Controller;
 use Yii;
@@ -11,6 +11,10 @@ class AddUserController extends Controller
 {
     public function actionIndex()
     {
+        $db = Yii::$app->db;
+        $transaction = $db->beginTransaction();
+
+        try {
 
         $auth = Yii::$app->authManager;
 
@@ -29,6 +33,13 @@ class AddUserController extends Controller
         $user->generateAccessToken();
         $user->save();
 
+        $translatorModel = new Translator();
+        $translatorModel->user_id = $user->id;
+        $translatorModel->weekdays = 1;
+        //$translatorModel->worktime = [];
+
+        $translatorModel->save();
+
         $auth->assign($translator, $user->getId());
 
 
@@ -41,6 +52,12 @@ class AddUserController extends Controller
         $user->generateAccessToken();
         $user->save();
 
+        $translatorModel = new Translator();
+        $translatorModel->user_id = $user->id;
+        $translatorModel->weekdays = 0;
+
+        $translatorModel->save();
+
         $auth->assign($translator, $user->getId());
 
         $user = new User();
@@ -51,6 +68,12 @@ class AddUserController extends Controller
         $user->generateEmailVerificationToken();
         $user->generateAccessToken();
         $user->save();
+
+        $translatorModel = new Translator();
+        $translatorModel->user_id = $user->id;
+        $translatorModel->weekdays = 0;
+
+        $translatorModel->save();
 
         $auth->assign($translator, $user->getId());
 
@@ -66,6 +89,13 @@ class AddUserController extends Controller
         $auth->assign($admin, $user->getId());
 
         echo 'Пользователи созданы'.PHP_EOL;
+
+            $transaction->commit();
+
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            echo "Ошибка транзакции ".$e->getMessage().PHP_EOL;
+        }
     }
 
 }

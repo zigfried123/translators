@@ -7,17 +7,19 @@ class m251013_064208_create_table_translators extends Migration
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
-        $this->createTable('translators', [
+        $this->createTable('translator', [
             'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull()->unique(),
             'weekdays' => $this->boolean()->notNull(),
-            'worktime' => 'JSON NOT NULL'
+            'worktime' => 'JSON NOT NULL',
+            'user_id' => $this->integer()->notNull()->unique()
         ]);
+
+        $this->addForeignKey('fk_user_user_id','translator','user_id', 'user','id','CASCADE','RESTRICT');
     }
 
     public function down()
     {
-        $this->dropTable('translators');
+        $this->dropTable('translator');
 
         return false;
     }
