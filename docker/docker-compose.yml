@@ -56,7 +56,7 @@ services:
     volumes:
       - "../vue:/var/www/vue"
       - ./src:/vue/src
-      - ../vue/node_modules:/var/www/vue/node_modules
+      - /var/www/vue/node_modules
     networks:
       - default
     stdin_open: true
