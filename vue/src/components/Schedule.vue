@@ -46,21 +46,17 @@ onMounted(() => {
 function validate(){
   props.translator.worktime.map(x => {
     if(x.after && x.before) {
-      if (!(x.after.HH && x.before.HH)) {
-        x.error = 'Укажите время работы.';
-      } else if (x.after.HH >= x.before.HH) {
+      if (x.after.HH >= x.before.HH) {
         x.error = 'Время С должно быть меньше времени До';
       } else {
         x.error = false;
       }
+    }else{
+      x.error = 'Укажите время работы.';
     }
   })
 
-  if (props.translator.worktime.some(x => x.error)) {
-    return false;
-  }
 
-  return true;
 }
 
 
@@ -68,7 +64,9 @@ async function onSetSchedule() {
 
   dataSuccess.value = false;
 
-  if(!validate()){
+  validate();
+
+  if (props.translator.worktime.some(x => x.error)) {
     return false;
   }
 
