@@ -59,6 +59,8 @@ function validate(){
   if (props.translator.worktime.some(x => x.error)) {
     return false;
   }
+
+  return true;
 }
 
 
