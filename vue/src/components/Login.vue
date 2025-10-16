@@ -10,9 +10,10 @@ const router = useRouter();
 let username = ref(null);
 let password = ref(null);
 
+let errorMessage = ref(null);
+
 interface ApiResponse {
   token: string; // Or a more specific type for 'data'
-  roles: [];
 }
 
 onMounted(() => {
@@ -28,7 +29,7 @@ async function onSubmit() {
   postData.password = password.value;
 
   try {
-    const res = await axios.post('http://localhost:80/user/login', postData, {
+    const res = await axios.post(`${store.host}/user/login`, postData, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -37,13 +38,11 @@ async function onSubmit() {
     const data: ApiResponse = await res.data;
 
     store.token = data.token;
-    store.username = username.value;
-    store.roles = data.roles;
 
     router.push({name: 'home'})
 
   } catch (error) {
-    console.log(error);
+    errorMessage.value = error.response.data.message;
   }
 
 }
@@ -54,14 +53,22 @@ async function onSubmit() {
 
   <div class="site-login">
 
-    <div class="mt-5 offset-lg-3 col-lg-6">
+    <div class="mt-5 " style="width:400px;margin:0 auto">
 
-      <p>Введите имя пользователя и пароль</p>
+
 
       <form @submit.prevent="onSubmit" id="login-form">
 
-        <input v-model="username" required>
-        <input type="password" v-model="password" required>
+        <div class="mb-3">
+        <label for="username" class="form-label">Пользователь</label>
+        <input v-model="username" id="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" v-model="password" id="password" class="form-control" required>
+        </div>
+
+        {{errorMessage}}
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary btn-block">Войти</button>

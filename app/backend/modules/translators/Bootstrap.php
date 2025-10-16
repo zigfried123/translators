@@ -13,7 +13,8 @@ class Bootstrap implements BootstrapInterface
         $app->getUrlManager()->addRules(
             [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'default'],
-                'translators' => 'translators/default/list',
+                'translators/<action>' => 'translators/default/<action>',
+
             ]
         );
     }

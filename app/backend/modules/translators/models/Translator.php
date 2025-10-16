@@ -31,7 +31,7 @@ class Translator extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worktime'], 'default', 'value' => []],
+            [['worktime'], 'default', 'value' => ''],
             [['weekdays'], 'boolean'],
             [['worktime'], 'string'],
             [['user_id'], 'integer'],

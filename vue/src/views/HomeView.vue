@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import TheWelcome from '../components/Login.vue'
-import {onMounted, ref, reactive} from 'vue'
+import {onMounted, ref, reactive, computed, watch} from 'vue'
 import {useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/user'
 import axios from 'axios'
+import VueTimePicker from "vue3-timepicker";
+import "vue3-timepicker/dist/VueTimepicker.css";
+import Schedule from '../components/Schedule.vue'
 
 const store = useUserStore();
 const router = useRouter();
+
+let username = ref(null);
+let roles = reactive([]);
+let translator = {id: null, weekdays: true, worktime: []};
+
 
 
 onMounted(async () => {
@@ -14,22 +22,46 @@ onMounted(async () => {
     return router.push({name: 'login'})
   }
 
-  const res = await axios.post('http://localhost:80/user/userdata-by-token', {token: store.token}, {
+  await getUserdata();
+
+});
+
+async function getUserdata(){
+  const res = await axios.get(`${store.host}/user/userdata-by-token`, {
     headers: {
-      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.token}`
     }
   });
 
   const data = await res.data;
 
-  console.log(data);
-});
+  username.value = data.username;
+  roles = data.roles;
+  translator = data.translator;
+}
+
 
 
 </script>
 
 <template>
-  Выполнен вход в систему пользователем {{ store.username }} роль {{ store.roles[0] }}
+  Выполнен вход в систему пользователем {{ username }} роль {{ roles[0] }}
+
+  <h2 align="center">Расписание</h2>
+
+
+
+  <div v-if="roles[0]=='translator'">
+    <Schedule  :translator="reactive(translator)"/>
+  </div>
+
+
+  <div v-if="roles[0]=='admin'">
+123hhhhhhhhhhhhhhh
+  </div>
+
+
+
 
 
 </template>

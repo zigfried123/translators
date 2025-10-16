@@ -16,8 +16,6 @@ export const useUserStore = defineStore('userStore', {
     state: () => ({
         host: 'http://localhost:80',
         token: '',
-        username: '',
-        roles: []
     }),
     persist: true,
     actions: {

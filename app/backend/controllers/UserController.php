@@ -5,10 +5,11 @@ namespace backend\controllers;
 use backend\models\SignupForm;
 use common\models\User;
 use yii\db\Exception;
-use yii\filters\auth\HttpBasicAuth;
+use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 use Yii;
-use yii\web\Cookie;
+
+
 
 class UserController extends ActiveController
 {
@@ -27,6 +28,13 @@ class UserController extends ActiveController
             ],
         ];
 
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+            'except' => ['login', 'signup'],
+        ];
+
+
+
         return $behaviors;
     }
 
@@ -38,6 +46,10 @@ class UserController extends ActiveController
 
 
         $identity = User::findOne(['username'=>$post['username']]);
+
+        if(!$identity){
+            throw new Exception('User not found');
+        }
 
         $identity->validatePassword($post['password']);
 
@@ -68,18 +80,17 @@ class UserController extends ActiveController
 
         $auth = Yii::$app->authManager;
 
-
         $request = Yii::$app->request;
-        $post = $request->post();
-        $token = $post['token'];
+
+        $token = explode(' ', $request->headers['Authorization'])[1];
 
         $user = User::findIdentityByAccessToken($token);
 
         $roles = array_keys($auth->getRolesByUser($user->getId()));
 
-
-        $data = ['user' => $user->username, 'roles' => $roles];
+        $data = ['username' => $user->username, 'roles' => $roles];
         if($user->translator) {
+            $user->translator->worktime = json_decode($user->translator->worktime);
             $data['translator'] = $user->translator;
         }
 
