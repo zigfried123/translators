@@ -10,7 +10,7 @@ use Yii;
  *
  * @property int $id
  * @property string|null $name
- * @property int|null $weekdays
+ * @property int|null $is_weekdays
  * @property string|null $worktime
  */
 class Translator extends \yii\db\ActiveRecord
@@ -32,7 +32,7 @@ class Translator extends \yii\db\ActiveRecord
     {
         return [
             [['worktime'], 'default', 'value' => ''],
-            [['weekdays'], 'boolean'],
+            [['is_weekdays'], 'boolean'],
             [['worktime'], 'string'],
             [['user_id'], 'integer'],
         ];
@@ -46,7 +46,7 @@ class Translator extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'weekdays' => 'Weekdays',
+            'is_weekdays' => 'is_weekdays',
             'worktime' => 'Worktime',
         ];
     }

@@ -18,6 +18,9 @@ class UserController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+
+        unset($behaviors['authenticator']);
+
         $behaviors['corsFilter'] = [
             'class' => \yii\filters\Cors::class,
             'cors' => [
@@ -32,8 +35,6 @@ class UserController extends ActiveController
             'class' => HttpBearerAuth::class,
             'except' => ['login', 'signup'],
         ];
-
-
 
         return $behaviors;
     }
@@ -51,17 +52,28 @@ class UserController extends ActiveController
             throw new Exception('User not found');
         }
 
-        $identity->validatePassword($post['password']);
-
-        if(!$identity){
-            throw new Exception('User is not authentificated');
+        if(!$identity->validatePassword($post['password'])){
+            throw new Exception('User not authentificated');
         }
-
-        Yii::$app->user->login($identity);
 
         $auth = Yii::$app->authManager;
 
         return ['token' => $identity->access_token, 'roles' => array_keys($auth->getRolesByUser($identity->getId()))];
+    }
+
+    public function actionLogout(){
+
+        $request = Yii::$app->request;
+
+        $token = explode(' ', $request->headers['Authorization'])[1];
+
+        $user = User::findIdentityByAccessToken($token);
+
+        if($user) {
+            return true;
+        }
+
+        return false;
     }
 
     public function actionSignup(){

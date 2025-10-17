@@ -14,6 +14,9 @@ class DefaultController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+
+        unset($behaviors['authenticator']);
+
         $behaviors['corsFilter'] = [
             'class' => \yii\filters\Cors::class,
             'cors' => [
@@ -28,6 +31,9 @@ class DefaultController extends ActiveController
             'class' => HttpBearerAuth::class,
         ];
 
+        $behaviors['authenticator']['except'] = ['options'];
+
+
 
         return $behaviors;
     }
@@ -38,10 +44,31 @@ class DefaultController extends ActiveController
         $translator = Translator::findOne(['id'=>$post['translatorId']]);
 
         $translator->worktime = json_encode($post['daysObjs']);
-        $translator->weekdays = $post['weekdays'];
+        $translator->is_weekdays = $post['is_weekdays'];
 
         $translator->save();
 
         return $translator;
     }
+
+    public function actionGetTranslatorsData()
+    {
+        $translators = Translator::find()->joinWith('user')->all();
+
+        $data = [];
+
+        foreach ($translators as $translator) {
+
+            $data[] = [
+                'id' => $translator->id,
+                'is_weekdays' => $translator->is_weekdays,
+                'worktime' => json_decode($translator->worktime),
+                'username' => $translator->user->username
+            ];
+
+        }
+
+        return $data;
+    }
+
 }

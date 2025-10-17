@@ -8,5 +8,7 @@ class Module extends \yii\base\Module
     {
         parent::init();
         \Yii::$app->user->enableSession = false;
+
+        \Yii::configure($this, require __DIR__ . '/config.php');
     }
 }

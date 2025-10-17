@@ -13,12 +13,12 @@ interface UserState {
 
 
 export const useUserStore = defineStore('userStore', {
-    state: () => ({
-        host: 'http://localhost:80',
-        token: '',
-    }),
-    persist: true,
-    actions: {
-
+    state: () => {
+        return {
+            host: 'http://localhost:80',
+            translatorHost: 'http://localhost:5278',
+            token: '',
+        }
     },
-});
+    persist: true,
+})

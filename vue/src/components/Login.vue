@@ -18,11 +18,11 @@ interface ApiResponse {
 
 onMounted(() => {
   if (store.token) {
-    router.push({name: 'home'})
+    router.push({name: 'dashboard'})
   }
 });
 
-async function onSubmit() {
+async function onLogin() {
 
   let postData = {username: null, password: null};
   postData.username = username.value;
@@ -37,9 +37,11 @@ async function onSubmit() {
 
     const data: ApiResponse = await res.data;
 
+    localStorage.setItem('userStore',JSON.stringify({'token':data.token}))
+
     store.token = data.token;
 
-    router.push({name: 'home'})
+    router.push({name: 'dashboard'})
 
   } catch (error) {
     errorMessage.value = error.response.data.message;
@@ -57,7 +59,7 @@ async function onSubmit() {
 
 
 
-      <form @submit.prevent="onSubmit" id="login-form">
+      <form @submit.prevent="onLogin" id="login-form">
 
         <div class="mb-3">
         <label for="username" class="form-label">Пользователь</label>

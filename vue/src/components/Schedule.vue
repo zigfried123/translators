@@ -32,14 +32,14 @@ const dataSuccess: any = ref(false);
 onMounted(() => {
 
   if (!props.translator.worktime) {
-    if (props.translator.weekdays) {
+    if (props.translator.is_weekdays) {
       props.translator.worktime = weekdaysObj;
     } else {
       props.translator.worktime = holidaysObj;
     }
   }
 
-  props.translator.weekdays = Boolean(props.translator.weekdays);
+  props.translator.is_weekdays = Boolean(props.translator.is_weekdays);
 
 });
 
@@ -70,7 +70,7 @@ async function onSetSchedule() {
     return false;
   }
 
-  let postData = {daysObjs: props.translator.worktime, translatorId: props.translator.id, weekdays: props.translator.weekdays};
+  let postData = {daysObjs: props.translator.worktime, translatorId: props.translator.id, is_weekdays: props.translator.is_weekdays};
 
   try {
     const res = await axios.post(`${store.host}/translators/set-schedule`, postData, {
@@ -91,7 +91,7 @@ async function onSetSchedule() {
 
 async function onChangeWeekdays() {
 
-  if (props.translator.weekdays) {
+  if (props.translator.is_weekdays) {
     props.translator.worktime = weekdaysObj;
   } else {
     props.translator.worktime = holidaysObj;
@@ -109,7 +109,7 @@ async function onChangeWeekdays() {
   <form class="justify-content-end" @submit.prevent="onSetSchedule">
 <div class="" style="width:470px;margin:0 auto;text-align:right">
   <label for="isWeekdays">Будни</label>
-    <input type="checkbox" id="isWeekdays" @change="onChangeWeekdays" v-model="props.translator.weekdays">
+    <input type="checkbox" id="isWeekdays" @change="onChangeWeekdays" v-model="props.translator.is_weekdays">
 </div>
     <div v-for="(val,index) in props.translator.worktime" :key="val['day']">
       <div class="row justify-content-center" style="min-width:500px">

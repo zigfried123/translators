@@ -47,13 +47,12 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-
         'urlManager' => [
             'enablePrettyUrl' => true,
             'enableStrictParsing' => false,
             'showScriptName' => false,
             'rules' => [
-
+                '/user/logout' => '/user/logout'
             ],
         ],
 
